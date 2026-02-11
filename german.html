@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Deutsch Lernen — Learn German</title>
+  <link rel="stylesheet" href="german-styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a href="#" class="nav-brand">
+        <span class="brand-flag">🇩🇪</span>
+        <span class="brand-text">Deutsch Lernen</span>
+        <span class="brand-author">by Ephraim Jholo Cruz</span>
+      </a>
+      <div class="nav-links" id="nav-links">
+        <a href="#lessons" class="nav-link active" data-section="lessons">Lessons</a>
+        <a href="#flashcards" class="nav-link" data-section="flashcards">Flashcards</a>
+        <a href="#quiz" class="nav-link" data-section="quiz">Quiz</a>
+        <a href="#grammar" class="nav-link" data-section="grammar">Grammar</a>
+        <a href="#listen" class="nav-link" data-section="listen">Listen</a>
+        <a href="#phrases" class="nav-link" data-section="phrases">Phrases</a>
+      </div>
+      <div class="nav-progress">
+        <span class="progress-label">Progress</span>
+        <div class="progress-bar-mini">
+          <div class="progress-fill-mini" id="nav-progress-fill"></div>
+        </div>
+        <span class="progress-pct" id="nav-progress-pct">0%</span>
+      </div>
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <header class="hero" id="hero">
+    <div class="hero-inner">
+      <p class="hero-kicker">Willkommen!</p>
+      <h1 class="hero-title">Learn to Speak <span class="highlight">German</span></h1>
+      <p class="hero-desc">Master vocabulary, grammar, and pronunciation through interactive lessons, flashcards, and quizzes. Track your progress as you go.</p>
+      <div class="hero-actions">
+        <a href="#lessons" class="btn btn-primary">Start Learning</a>
+        <a href="#quiz" class="btn btn-outline">Take a Quiz</a>
+      </div>
+      <div class="hero-stats" id="hero-stats">
+        <div class="hero-stat">
+          <span class="hero-stat-num" id="stat-words">0</span>
+          <span class="hero-stat-label">Words to Learn</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-num" id="stat-lessons">0</span>
+          <span class="hero-stat-label">Lessons</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-num" id="stat-mastered">0</span>
+          <span class="hero-stat-label">Words Mastered</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Lessons Section -->
+  <section class="section" id="lessons">
+    <div class="section-inner">
+      <div class="section-header">
+        <h2 class="section-title">Lessons</h2>
+        <p class="section-desc">Choose a category to start learning vocabulary. Each lesson includes German words, pronunciation, and English translations.</p>
+      </div>
+      <div class="category-pills" id="category-pills"></div>
+      <div class="lesson-grid" id="lesson-grid"></div>
+    </div>
+  </section>
+
+  <!-- Flashcards Section -->
+  <section class="section section-alt" id="flashcards">
+    <div class="section-inner">
+      <div class="section-header">
+        <h2 class="section-title">Flashcards</h2>
+        <p class="section-desc">Click a card to flip it and reveal the translation. Mark words you've mastered.</p>
+      </div>
+      <div class="flashcard-controls">
+        <select id="flashcard-category" class="select-input">
+          <option value="all">All Categories</option>
+        </select>
+        <button class="btn btn-sm" id="shuffle-btn">Shuffle</button>
+        <span class="flashcard-counter" id="flashcard-counter">0 / 0</span>
+      </div>
+      <div class="flashcard-area" id="flashcard-area">
+        <button class="flashcard-nav flashcard-prev" id="fc-prev" aria-label="Previous">&larr;</button>
+        <div class="flashcard-wrapper">
+          <div class="flashcard" id="flashcard">
+            <div class="flashcard-front">
+              <span class="fc-lang">Deutsch</span>
+              <span class="fc-word" id="fc-front-word"></span>
+              <button class="speak-btn speak-btn-fc" id="fc-listen-btn" data-speak="" title="Listen to pronunciation" aria-label="Listen to pronunciation">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                  <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                  <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                </svg>
+              </button>
+              <span class="fc-hint" id="fc-front-hint"></span>
+              <span class="fc-tap">Click to flip &middot; Speaker to listen</span>
+            </div>
+            <div class="flashcard-back">
+              <span class="fc-lang">English</span>
+              <span class="fc-word" id="fc-back-word"></span>
+              <span class="fc-pronunciation" id="fc-back-pron"></span>
+              <span class="fc-example" id="fc-back-example"></span>
+            </div>
+          </div>
+        </div>
+        <button class="flashcard-nav flashcard-next" id="fc-next" aria-label="Next">&rarr;</button>
+      </div>
+      <div class="flashcard-actions">
+        <button class="btn btn-danger btn-sm" id="fc-miss">Still Learning</button>
+        <button class="btn btn-success btn-sm" id="fc-got">Got it!</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quiz Section -->
+  <section class="section" id="quiz">
+    <div class="section-inner">
+      <div class="section-header">
+        <h2 class="section-title">Quiz</h2>
+        <p class="section-desc">Test your knowledge! Choose the correct translation for each German word.</p>
+      </div>
+      <div class="quiz-setup" id="quiz-setup">
+        <div class="quiz-options">
+          <div class="quiz-option-group">
+            <label class="quiz-label">Category</label>
+            <select id="quiz-category" class="select-input">
+              <option value="all">All Categories</option>
+            </select>
+          </div>
+          <div class="quiz-option-group">
+            <label class="quiz-label">Questions</label>
+            <select id="quiz-count" class="select-input">
+              <option value="5">5 Questions</option>
+              <option value="10" selected>10 Questions</option>
+              <option value="20">20 Questions</option>
+            </select>
+          </div>
+          <div class="quiz-option-group">
+            <label class="quiz-label">Direction</label>
+            <select id="quiz-direction" class="select-input">
+              <option value="de-en">German → English</option>
+              <option value="en-de">English → German</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn btn-primary" id="quiz-start">Start Quiz</button>
+      </div>
+      <div class="quiz-active" id="quiz-active" style="display:none;">
+        <div class="quiz-progress-bar">
+          <div class="quiz-progress-fill" id="quiz-progress-fill"></div>
+        </div>
+        <div class="quiz-question-num" id="quiz-question-num"></div>
+        <div class="quiz-prompt" id="quiz-prompt"></div>
+        <div class="quiz-choices" id="quiz-choices"></div>
+        <div class="quiz-feedback" id="quiz-feedback"></div>
+        <button class="btn btn-primary" id="quiz-next" style="display:none;">Next Question</button>
+      </div>
+      <div class="quiz-results" id="quiz-results" style="display:none;">
+        <div class="results-card">
+          <div class="results-icon" id="results-icon"></div>
+          <h3 class="results-title" id="results-title"></h3>
+          <p class="results-score" id="results-score"></p>
+          <div class="results-breakdown" id="results-breakdown"></div>
+          <button class="btn btn-primary" id="quiz-retry">Try Again</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Grammar Section -->
+  <section class="section section-alt" id="grammar">
+    <div class="section-inner">
+      <div class="section-header">
+        <h2 class="section-title">Grammar Basics</h2>
+        <p class="section-desc">Understand the building blocks of German with these essential grammar concepts.</p>
+      </div>
+      <div class="grammar-tabs" id="grammar-tabs"></div>
+      <div class="grammar-content" id="grammar-content"></div>
+    </div>
+  </section>
+
+  <!-- Listen & Practice Section -->
+  <section class="section" id="listen">
+    <div class="section-inner">
+      <div class="section-header">
+        <h2 class="section-title">Listen & Practice</h2>
+        <p class="section-desc">Hear how German words are pronounced by a native-sounding voice. Click the speaker to listen at normal speed, or the slow button for a careful pronunciation.</p>
+      </div>
+      <div class="listen-controls">
+        <select id="listen-category" class="select-input">
+          <option value="all">All Categories</option>
+        </select>
+        <button class="btn btn-primary btn-sm" id="listen-play-all">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+          Play All Words
+        </button>
+        <button class="btn btn-ghost btn-sm" id="listen-stop" style="display:none;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="6" width="12" height="12" rx="2"></rect></svg>
+          Stop
+        </button>
+      </div>
+      <div id="listen-practice-content"></div>
+    </div>
+  </section>
+
+  <!-- Common Phrases Section -->
+  <section class="section section-alt" id="phrases">
+    <div class="section-inner">
+      <div class="section-header">
+        <h2 class="section-title">Common Phrases</h2>
+        <p class="section-desc">Essential phrases for everyday conversations. Click any phrase to hear the pronunciation guide.</p>
+      </div>
+      <div class="phrase-categories" id="phrase-categories"></div>
+      <div class="phrase-list" id="phrase-list"></div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <p>Deutsch Lernen — Your interactive German learning companion</p>
+      <p class="footer-sub">Built with care. Viel Erfolg beim Lernen! (Good luck learning!)</p>
+    </div>
+  </footer>
+
+  <script src="german-app.js"></script>
+</body>
+</html>
