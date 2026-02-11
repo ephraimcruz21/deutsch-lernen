@@ -635,6 +635,12 @@ function updateProgressUI() {
   if (fill) fill.style.width = pct + "%";
   if (pctEl) pctEl.textContent = pct + "%";
   if (statMastered) statMastered.textContent = mastered;
+
+  // Mobile progress bar
+  const mobileFill = document.getElementById("mobile-progress-fill");
+  const mobilePct = document.getElementById("mobile-progress-pct");
+  if (mobileFill) mobileFill.style.width = pct + "%";
+  if (mobilePct) mobilePct.textContent = pct + "%";
 }
 
 // ============================================================
@@ -1488,14 +1494,81 @@ function initNavigation() {
   });
 
   // Hamburger
-  document.getElementById("hamburger")?.addEventListener("click", () => {
-    document.getElementById("nav-links")?.classList.toggle("open");
+  const hamburger = document.getElementById("hamburger");
+  const navLinks = document.getElementById("nav-links");
+  hamburger?.addEventListener("click", (e) => {
+    e.stopPropagation();
+    navLinks?.classList.toggle("open");
+    // Add mobile progress bar inside menu if not already there
+    if (navLinks && !navLinks.querySelector(".mobile-progress")) {
+      const mp = document.createElement("div");
+      mp.className = "mobile-progress";
+      mp.innerHTML = `
+        <span style="font-size:.78rem;font-weight:500;color:var(--text-3);">Progress</span>
+        <div style="flex:1;height:6px;background:var(--border);border-radius:100px;overflow:hidden;">
+          <div id="mobile-progress-fill" style="height:100%;background:linear-gradient(90deg,var(--primary),var(--gold));border-radius:100px;width:0%;transition:width .5s;"></div>
+        </div>
+        <span id="mobile-progress-pct" style="font-size:.78rem;font-weight:600;color:var(--text);min-width:30px;">0%</span>
+      `;
+      navLinks.appendChild(mp);
+      updateProgressUI();
+    }
+  });
+
+  // Close mobile menu when tapping outside
+  document.addEventListener("click", (e) => {
+    if (navLinks?.classList.contains("open") && !navLinks.contains(e.target) && e.target !== hamburger) {
+      navLinks.classList.remove("open");
+    }
   });
 
   // Close modal on Escape
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") closeLessonModal();
   });
+}
+
+// ============================================================
+// TOUCH SWIPE — Flashcard navigation on mobile
+// ============================================================
+function initFlashcardSwipe() {
+  const wrapper = document.getElementById("flashcard-area");
+  if (!wrapper) return;
+
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let touchEndX = 0;
+  let touchEndY = 0;
+
+  wrapper.addEventListener("touchstart", (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+
+  wrapper.addEventListener("touchend", (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    touchEndY = e.changedTouches[0].screenY;
+    handleSwipe();
+  }, { passive: true });
+
+  function handleSwipe() {
+    const deltaX = touchEndX - touchStartX;
+    const deltaY = touchEndY - touchStartY;
+    const minSwipe = 50;
+
+    // Only trigger if horizontal swipe is dominant
+    if (Math.abs(deltaX) < minSwipe || Math.abs(deltaX) < Math.abs(deltaY)) return;
+    if (flashcardDeck.length === 0) return;
+
+    if (deltaX < 0) {
+      // Swipe left → next card
+      flashcardIndex = (flashcardIndex + 1) % flashcardDeck.length;
+    } else {
+      // Swipe right → previous card
+      flashcardIndex = (flashcardIndex - 1 + flashcardDeck.length) % flashcardDeck.length;
+    }
+    renderFlashcard();
+  }
 }
 
 // ============================================================
@@ -1513,6 +1586,9 @@ function init() {
   renderPhraseCategories();
   renderPhraseList();
   initNavigation();
+
+  // Touch swipe support for flashcards
+  initFlashcardSwipe();
 
   // Attach speak button on flashcard
   const fcListenBtn = document.getElementById("fc-listen-btn");
